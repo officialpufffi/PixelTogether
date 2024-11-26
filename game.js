@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
+    const coordinatesDisplay = document.getElementById('coordinates');
     let selectedColor = '#000000';
     const pixelSize = 8;
     const columns = canvas.width / pixelSize;
@@ -17,6 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
     };
 
+    const updateCoordinates = (event) => {
+        const x = Math.floor(event.offsetX / pixelSize);
+        const y = Math.floor(event.offsetY / pixelSize);
+        coordinatesDisplay.textContent = `X: ${x}, Y: ${y}`;
+    };
+
+    canvas.addEventListener('mousemove', updateCoordinates);
     canvas.addEventListener('click', (event) => {
         const x = Math.floor(event.offsetX / pixelSize);
         const y = Math.floor(event.offsetY / pixelSize);

@@ -47,6 +47,14 @@
         .selected {
             transform: scale(1.2);
         }
+        #coordinates {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +62,7 @@
         <canvas id="pixelCanvas" width="256" height="256"></canvas>
     </div>
     <div id="colorPalette"></div>
+    <div id="coordinates">X: 0, Y: 0</div>
     <script src="game.js"></script>
 </body>
 </html>
