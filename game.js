@@ -1,12 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const coordinatesDisplay = document.getElementById('coordinates');
     let selectedColor = '#000000';
-    const pixelSize = 8;
+    const pixelSize = 16;
     const columns = canvas.width / pixelSize;
     const rows = canvas.height / pixelSize;
     let scale = 1;
+
+    let config;
+    try {
+        const response = await fetch('config.json');
+        if (!response.ok) throw new Error(`Failed to load config.json: ${response.status}`);
+        config = await response.json();
+    } catch (error) {
+        console.error('Error loading config.json:', error);
+        return;
+    }
+
+    const ws = new WebSocket(`ws://${config.ip}:${config.port}`);
 
     const initCanvas = () => {
         ctx.fillStyle = '#FFFFFF';
@@ -29,6 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const x = Math.floor(event.offsetX / pixelSize);
         const y = Math.floor(event.offsetY / pixelSize);
         drawPixel(x, y, selectedColor);
+
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ x, y, color: selectedColor }));
+        }
+    });
+
+    ws.addEventListener('message', (event) => {
+        const pixels = JSON.parse(event.data);
+        pixels.forEach(pixel => {
+            const [x, y] = pixel.coordinate.split(';').map(Number);
+            drawPixel(x, y, pixel.color);
+        });
     });
 
     async function loadPalette() {
