@@ -24,6 +24,7 @@
         }
         #pixelCanvas {
             border: 2px solid #000000;
+            background-color: #FFFFFF;
         }
         #colorPalette {
             display: flex;
@@ -32,6 +33,7 @@
             width: 100%;
             justify-content: center;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         .color-box {
             width: 30px;
@@ -49,11 +51,70 @@
         }
         #coordinates {
             position: absolute;
-            bottom: 10px;
             left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             color: white;
             font-family: Arial, sans-serif;
             font-size: 14px;
+        }
+        #chatbox {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 450px;
+            background-color: var(--chatbox-background-color, #333);
+            border: 2px solid var(--chatbox-border-color, #000000);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(109, 109, 109, 0.5);
+        }
+        #chatbox-header {
+            font-size: 18px;
+            color: var(--chatbox-header-color, #FFFFFF);
+            font-family: Arial, sans-serif;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #chatbox-messages {
+            flex: 1;
+            overflow-y: auto;
+            background-color: var(--chatbox-messages-background-color, #444);
+            border-radius: 5px;
+            padding: 10px;
+            color: var(--chatbox-text-color, #FFFFFF);
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        #chatbox-input {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        #chatbox-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--chatbox-input-border-color, #555);
+            border-radius: 5px;
+            background-color: var(--chatbox-input-background-color, #222);
+            color: var(--chatbox-text-color, #FFFFFF);
+            font-size: 14px;
+        }
+        #chatbox-input button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--chatbox-button-color, #555);
+            color: var(--chatbox-button-text-color, #FFFFFF);
+            cursor: pointer;
+        }
+        #chatbox-input button:hover {
+            background-color: var(--chatbox-button-hover-color, #666);
         }
     </style>
 </head>
@@ -61,8 +122,17 @@
     <div id="mainContainer">
         <canvas id="pixelCanvas" width="256" height="256"></canvas>
     </div>
-    <div id="colorPalette"></div>
-    <div id="coordinates">X: 0, Y: 0</div>
+    <div id="colorPalette">
+        <div id="coordinates">X: 0, Y: 0</div>
+    </div>
+    <div id="chatbox">
+        <div id="chatbox-header">Chat</div>
+        <div id="chatbox-messages"></div>
+        <div id="chatbox-input">
+            <input type="text" placeholder="Enter a message...">
+            <button>Send</button>
+        </div>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>

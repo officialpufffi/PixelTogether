@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const ws = new WebSocket(`ws://${config.ip}:${config.port}`);
 
-    const initCanvas = () => {
-        ctx.fillStyle = '#FFFFFF';
+    const initCanvas = (canvasColor) => {
+        ctx.fillStyle = canvasColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
@@ -60,8 +60,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             const response = await fetch('palette.json');
             if (!response.ok) throw new Error(`Failed to load palette.json: ${response.status}`);
             const palette = await response.json();
+
+            document.body.style.backgroundColor = `#${palette.backgroundColor}`;
             const colorPalette = document.getElementById('colorPalette');
             colorPalette.style.backgroundColor = `#${palette.paletteBackgroundColor}`;
+
+            initCanvas(`#${palette.canvasColor}`);
+            
+            canvas.style.borderColor = `#${palette.frame}`;
 
             palette.colors.forEach(color => {
                 const colorBox = document.createElement('div');
@@ -82,6 +88,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    async function loadChatboxStyles() {
+        try {
+            const response = await fetch('palette.json');
+            if (!response.ok) throw new Error(`Failed to load palette.json: ${response.status}`);
+            const palette = await response.json();
+            const chatboxColors = palette.chatboxColors;
+
+            document.documentElement.style.setProperty('--chatbox-background-color', `#${chatboxColors.backgroundColor}`);
+            document.documentElement.style.setProperty('--chatbox-border-color', `#${chatboxColors.borderColor}`);
+            document.documentElement.style.setProperty('--chatbox-header-color', `#${chatboxColors.headerColor}`);
+            document.documentElement.style.setProperty('--chatbox-text-color', `#${chatboxColors.textColor}`);
+            document.documentElement.style.setProperty('--chatbox-messages-background-color', `#${chatboxColors.messagesBackgroundColor}`);
+            document.documentElement.style.setProperty('--chatbox-input-background-color', `#${chatboxColors.inputBackgroundColor}`);
+            document.documentElement.style.setProperty('--chatbox-input-border-color', `#${chatboxColors.inputBorderColor}`);
+            document.documentElement.style.setProperty('--chatbox-button-color', `#${chatboxColors.buttonColor}`);
+            document.documentElement.style.setProperty('--chatbox-button-text-color', `#${chatboxColors.buttonTextColor}`);
+            document.documentElement.style.setProperty('--chatbox-button-hover-color', `#${chatboxColors.buttonHoverColor}`);
+        } catch (error) {
+            console.error('Error applying chatbox styles:', error);
+        }
+    }
+
     canvas.addEventListener('wheel', (event) => {
         if (event.deltaY > 0) {
             scale = Math.max(0.5, scale - 0.1);
@@ -91,6 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         canvas.style.transform = `scale(${scale})`;
     });
 
-    initCanvas();
-    loadPalette();
+    await loadPalette();
+    await loadChatboxStyles();
 });

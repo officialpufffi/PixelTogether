@@ -3,6 +3,18 @@
     "frame": "000000",
     "backgroundColor": "808080",
     "paletteBackgroundColor": "B9C3CF",
+    "chatboxColors": {
+        "backgroundColor": "777F8C",
+        "borderColor": "000000",
+        "headerColor": "FFFFFF",
+        "textColor": "FFFFFF",
+        "messagesBackgroundColor": "424651",
+        "inputBackgroundColor": "1F1E26",
+        "inputBorderColor": "000000",
+        "buttonColor": "1F1E26",
+        "buttonTextColor": "FFFFFF",
+        "buttonHoverColor": "424651"
+    },
     "colors": [
         {
             "name": "White",
