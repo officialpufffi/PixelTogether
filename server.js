@@ -57,21 +57,33 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (message) => {
         try {
-            const { x, y, color } = JSON.parse(message);
-            const coordinate = `${x};${y}`;
+            const parsedMessage = JSON.parse(message);
 
-            db.run('INSERT OR REPLACE INTO pixels (coordinate, color) VALUES (?, ?)', [coordinate, color], (err) => {
-                if (err) {
-                    console.error('Error saving the pixel:', err.message);
-                } else {
-                    console.log(`Pixel placed at (${x}, ${y}) with color "${color}"`);
-                    wss.clients.forEach(client => {
-                        if (client.readyState === WebSocket.OPEN) {
-                            client.send(JSON.stringify([{ coordinate, color }]));
-                        }
-                    });
-                }
-            });
+            if (parsedMessage.x !== undefined && parsedMessage.y !== undefined && parsedMessage.color !== undefined) {
+                const { x, y, color } = parsedMessage;
+                const coordinate = `${x};${y}`;
+
+                db.run('INSERT OR REPLACE INTO pixels (coordinate, color) VALUES (?, ?)', [coordinate, color], (err) => {
+                    if (err) {
+                        console.error('Error saving the pixel:', err.message);
+                    } else {
+                        console.log(`Pixel placed at (${x}, ${y}) with color "${color}"`);
+                        wss.clients.forEach(client => {
+                            if (client.readyState === WebSocket.OPEN) {
+                                client.send(JSON.stringify([{ coordinate, color }]));
+                            }
+                        });
+                    }
+                });
+            } 
+            else if (parsedMessage.text !== undefined) {
+                const { text, isUser } = parsedMessage;
+                wss.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({ text, isUser }));
+                    }
+                });
+            }
         } catch (err) {
             console.error('Error processing message:', err.message);
         }

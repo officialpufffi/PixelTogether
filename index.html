@@ -58,6 +58,7 @@
             font-family: Arial, sans-serif;
             font-size: 14px;
         }
+
         #chatbox {
             position: absolute;
             right: 10px;
@@ -129,10 +130,25 @@
         <div id="chatbox-header">Chat</div>
         <div id="chatbox-messages"></div>
         <div id="chatbox-input">
-            <input type="text" placeholder="Enter a message...">
-            <button>Send</button>
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button id="sendButton">Send</button>
         </div>
     </div>
     <script src="game.js"></script>
+    <script src="chatMessages.js"></script>
 </body>
 </html>
+
+<script type="module">
+    import { config } from './config.js';
+    async function initialize() {
+        try {
+            const title = await config.getTitle();
+            document.title = title;
+        } catch (error) {
+            console.error('Error :', error);
+        }
+    }
+
+    initialize();
+</script>

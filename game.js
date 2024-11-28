@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const ws = new WebSocket(`ws://${config.ip}:${config.port}`);
+    const ws = new WebSocket(`ws://${config.ip}:${config.ws-port}`);
 
     const initCanvas = (canvasColor) => {
         ctx.fillStyle = canvasColor;
@@ -88,28 +88,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function loadChatboxStyles() {
-        try {
-            const response = await fetch('palette.json');
-            if (!response.ok) throw new Error(`Failed to load palette.json: ${response.status}`);
-            const palette = await response.json();
-            const chatboxColors = palette.chatboxColors;
-
-            document.documentElement.style.setProperty('--chatbox-background-color', `#${chatboxColors.backgroundColor}`);
-            document.documentElement.style.setProperty('--chatbox-border-color', `#${chatboxColors.borderColor}`);
-            document.documentElement.style.setProperty('--chatbox-header-color', `#${chatboxColors.headerColor}`);
-            document.documentElement.style.setProperty('--chatbox-text-color', `#${chatboxColors.textColor}`);
-            document.documentElement.style.setProperty('--chatbox-messages-background-color', `#${chatboxColors.messagesBackgroundColor}`);
-            document.documentElement.style.setProperty('--chatbox-input-background-color', `#${chatboxColors.inputBackgroundColor}`);
-            document.documentElement.style.setProperty('--chatbox-input-border-color', `#${chatboxColors.inputBorderColor}`);
-            document.documentElement.style.setProperty('--chatbox-button-color', `#${chatboxColors.buttonColor}`);
-            document.documentElement.style.setProperty('--chatbox-button-text-color', `#${chatboxColors.buttonTextColor}`);
-            document.documentElement.style.setProperty('--chatbox-button-hover-color', `#${chatboxColors.buttonHoverColor}`);
-        } catch (error) {
-            console.error('Error applying chatbox styles:', error);
-        }
-    }
-
     canvas.addEventListener('wheel', (event) => {
         if (event.deltaY > 0) {
             scale = Math.max(0.5, scale - 0.1);
@@ -120,5 +98,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     await loadPalette();
-    await loadChatboxStyles();
 });
