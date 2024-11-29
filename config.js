@@ -33,6 +33,11 @@ class Config {
         await this.loadConfig();
         return this.configData.port || 80;
     }
+    async getCanvasConfig() {
+        const response = await fetch('./config.json');
+        const data = await response.json();
+        return { width: data.canvasWidth, height: data.canvasHeight };
+    }
 }
 
 export const config = new Config();

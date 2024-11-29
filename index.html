@@ -121,7 +121,7 @@
 </head>
 <body>
     <div id="mainContainer">
-        <canvas id="pixelCanvas" width="256" height="256"></canvas>
+        <canvas id="pixelCanvas"></canvas>
     </div>
     <div id="colorPalette">
         <div id="coordinates">X: 0, Y: 0</div>
@@ -134,21 +134,27 @@
             <button id="sendButton">Send</button>
         </div>
     </div>
+
+    <script type="module">
+        import { config } from './config.js';
+    
+        async function initialize() {
+            try {
+                const title = await config.getTitle();
+                document.title = title;
+    
+                const canvasConfig = await config.getCanvasConfig();
+                const canvas = document.getElementById('pixelCanvas');
+                canvas.width = canvasConfig.width;
+                canvas.height = canvasConfig.height;
+            } catch (error) {
+                console.error('Error initializing app:', error);
+            }
+        }
+    
+        initialize();
+    </script>
     <script src="game.js"></script>
     <script src="chatMessages.js"></script>
 </body>
 </html>
-
-<script type="module">
-    import { config } from './config.js';
-    async function initialize() {
-        try {
-            const title = await config.getTitle();
-            document.title = title;
-        } catch (error) {
-            console.error('Error :', error);
-        }
-    }
-
-    initialize();
-</script>
