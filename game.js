@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const ws = new WebSocket(`ws://${config.ip}:${config.ws-port}`);
+    const ws = new WebSocket(`ws://${config.ip}:${config.ws_port}`);
 
     const initCanvas = (canvasColor) => {
         ctx.fillStyle = canvasColor;
